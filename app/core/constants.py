@@ -26,3 +26,28 @@ PROJECT_CREATE_EXAMPLES = {
         }
     }
 }
+PROJECT_UPDATE_EXAMPLES = {
+    'project1': {
+        'summary': 'Правильный запрос',
+        'value': {
+            'name': 'Хороший кот - мертвый кот!',
+            'description': 'Средства на медицинское обслуживание',
+            'full_amount': 300_000
+        }
+    },
+    'project2': {
+        'summary': 'Имя проекта уже есть в БД',
+        'value': {
+            'name': 'Хороший кот - здоровый кот!',
+            'description': 'Средства на лечение',
+            'full_amount': 400_000
+        }
+    },
+    'project3': {
+        'summary': 'Уменьшение суммы пожертвований',
+        'value': {
+            'description': 'Средства на корм оставшимся без попечения кошкам',
+            'full_amount': 50_000
+        }
+    }
+}
