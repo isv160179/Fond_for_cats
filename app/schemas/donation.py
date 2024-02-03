@@ -32,7 +32,7 @@ class DonationShortDB(DonationCreate):
 
 
 class DonationDB(DonationShortDB):
-    # user_id: Optional[int]
+    user_id: Optional[int]
     invested_amount: int
     fully_invested: bool
     close_date: Optional[datetime]

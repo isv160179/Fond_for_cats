@@ -59,3 +59,4 @@ def check_full_amount(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=WARNING_PROJECT_AMOUNT,
         )
+

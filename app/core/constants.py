@@ -10,6 +10,7 @@ WARNING_PROJECT_INVEST = (
 WARNING_PROJECT_AMOUNT = (
     'Нелья установить значение full_amount меньше уже вложенной суммы.'
 )
+WARNING_USER_DELETE = 'Удаление пользователей запрещено!'
 PROJECT_CREATE_EXAMPLES = {
     'project1': {
         'summary': 'Правильный запрос',
