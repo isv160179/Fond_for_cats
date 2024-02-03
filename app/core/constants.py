@@ -1,6 +1,8 @@
 APP_TITLE = 'QRKot'
 APP_DESCRIPTION = 'Благотворительный фонд поддержки котиков'
 APP_URL = 'sqlite+aiosqlite:///./fastapi.db'
+WARNING_PROJECT_NOT_FOUND = 'Проект не найден!'
+WARNING_PROJECT_NAME_NOT_UNIQUE = 'Проект с таким именем уже существует!',
 PROJECT_CREATE_EXAMPLES = {
     'project1': {
         'summary': 'Правильный запрос',
@@ -48,6 +50,28 @@ PROJECT_UPDATE_EXAMPLES = {
         'value': {
             'description': 'Средства на корм оставшимся без попечения кошкам',
             'full_amount': 50_000
+        }
+    }
+}
+DONATION_CREATE_EXAMPLES = {
+    'donation1': {
+        'summary': 'Правильный запрос',
+        'value': {
+            'full_amount': 50,
+            'comment': 'Пожертвования от мецената',
+        }
+    },
+    'donation2': {
+        'summary': 'Отсутствует обязательный параметр',
+        'value': {
+            'comment': 'Пожертвования от любителя котов',
+        }
+    },
+    'donation3': {
+        'summary': 'Некорректная сумма пожертвования',
+        'value': {
+            'full_amount': -100_000,
+            'comment': 'Очень не люблю кошек',
         }
     }
 }

@@ -12,7 +12,7 @@ class CharityProjectBase(BaseModel):
     full_amount: Optional[PositiveInt]
 
 
-class CharityProjectCreate(BaseModel):
+class CharityProjectCreate(CharityProjectBase):
     name: str = Field(..., max_length=100)
     description: str = Field(..., )
     full_amount: PositiveInt = Field(..., )

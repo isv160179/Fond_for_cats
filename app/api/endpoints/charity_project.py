@@ -1,13 +1,9 @@
-from fastapi import APIRouter, Body, HTTPException, Depends
+from fastapi import APIRouter, Body, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.api.validators import check_project_exist, check_name_duplicate
 from app.core.db import get_async_session
-from app.crud.charity_project import (
-    create_charity_project,
-    check_unique_name,
-    read_all_project_from_db, get_project_by_id, update_charity_project,
-    delete_charity_project
-)
+from app.crud.charity_project import project_crud
 from app.models.charity_project import CharityProject
 from app.schemas.charity_project import (
     CharityProjectCreate,
@@ -15,10 +11,7 @@ from app.schemas.charity_project import (
     CharityProjectUpdate,
 )
 
-router = APIRouter(
-    prefix='/charity_project',
-    tags=['charity_projects']
-)
+router = APIRouter()
 
 
 @router.post(
@@ -26,7 +19,7 @@ router = APIRouter(
     response_model=CharityProjectDB,
     response_model_exclude_none=True,
 )
-async def create_new_charity_project(
+async def create_charity_project(
         new_project_json: CharityProjectCreate = Body(
             ...,
             examples=CharityProjectCreate.Config.schema_extra['examples']
@@ -34,7 +27,7 @@ async def create_new_charity_project(
         session: AsyncSession = Depends(get_async_session),
 ) -> CharityProject:
     await check_name_duplicate(new_project_json.name, session)
-    new_project_db = await create_charity_project(new_project_json, session)
+    new_project_db = await project_crud.create(new_project_json, session)
     return new_project_db
 
 
@@ -43,10 +36,10 @@ async def create_new_charity_project(
     response_model=list[CharityProjectDB],
     response_model_exclude_none=True,
 )
-async def get_all_meeting_rooms(
+async def get_all_charity_projects(
         session: AsyncSession = Depends(get_async_session),
 ):
-    return await read_all_project_from_db(session)
+    return await project_crud.get_all(session)
 
 
 @router.patch(
@@ -54,7 +47,7 @@ async def get_all_meeting_rooms(
     response_model=CharityProjectDB,
     response_model_exclude_none=True,
 )
-async def partially_update_charity_project(
+async def update_charity_project(
         project_id: int,
         project_json: CharityProjectUpdate = Body(
             ...,
@@ -65,7 +58,7 @@ async def partially_update_charity_project(
     project_db = await check_project_exist(project_id, session)
     if project_json.name is not None:
         await check_name_duplicate(project_json.name, session)
-    return await update_charity_project(project_db, project_json, session)
+    return await project_crud.update(project_db, project_json, session)
 
 
 @router.delete(
@@ -73,34 +66,10 @@ async def partially_update_charity_project(
     response_model=CharityProjectDB,
     response_model_exclude_none=True,
 )
-async def remove_charity_project(
+async def delete_charity_project(
         project_id: int,
         session: AsyncSession = Depends(get_async_session),
 ):
     project_db = await check_project_exist(project_id, session)
-    project_db = await delete_charity_project(project_db, session)
+    project_db = await project_crud.delete(project_db, session)
     return project_db
-
-
-async def check_project_exist(
-        project_id: int,
-        session: AsyncSession
-) -> CharityProject:
-    project_db = await get_project_by_id(project_id, session)
-    if project_db is None:
-        raise HTTPException(
-            status_code=404,
-            detail='Проект не найден!'
-        )
-    return project_db
-
-
-async def check_name_duplicate(
-        project_name: str,
-        session: AsyncSession,
-) -> None:
-    if await check_unique_name(project_name, session):
-        raise HTTPException(
-            status_code=422,
-            detail='Благотворительный проект с таким именем уже существует!',
-        )
