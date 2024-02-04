@@ -8,6 +8,7 @@ from app.api.validators import (
     check_project_exist_not_close
 )
 from app.core.db import get_async_session
+from app.core.user import current_superuser
 from app.crud.charity_project import project_crud
 from app.models.charity_project import CharityProject
 from app.schemas.charity_project import (
@@ -23,6 +24,7 @@ router = APIRouter()
     '/',
     response_model=CharityProjectDB,
     response_model_exclude_none=True,
+    dependencies=[Depends(current_superuser)],
 )
 async def create_charity_project(
         new_project_json: CharityProjectCreate = Body(
@@ -31,6 +33,11 @@ async def create_charity_project(
         ),
         session: AsyncSession = Depends(get_async_session),
 ) -> CharityProject:
+    """
+    Только для суперюзеров.
+
+    Создаёт благотворительный проект.
+    """
     await check_name_duplicate(new_project_json.name, session)
     new_project_db = await project_crud.create(new_project_json, session)
     return new_project_db
@@ -44,6 +51,7 @@ async def create_charity_project(
 async def get_all_charity_projects(
         session: AsyncSession = Depends(get_async_session),
 ):
+    """Возвращает список всех проектов."""
     return await project_crud.get_all(session)
 
 
@@ -51,6 +59,7 @@ async def get_all_charity_projects(
     '/{project_id}',
     response_model=CharityProjectDB,
     response_model_exclude_none=True,
+    dependencies=[Depends(current_superuser)],
 )
 async def update_charity_project(
         project_id: int,
@@ -60,6 +69,12 @@ async def update_charity_project(
         ),
         session: AsyncSession = Depends(get_async_session),
 ):
+    """
+    Только для суперюзеров.
+
+    Закрытый проект нельзя редактировать;
+    нельзя установить требуемую сумму меньше уже вложенной.
+    """
     project_db = await check_project_exist_not_close(project_id, session)
     if project_json.full_amount is not None:
         check_full_amount(project_db, project_json.full_amount)
@@ -72,11 +87,19 @@ async def update_charity_project(
     '/{project_id}',
     response_model=CharityProjectDB,
     response_model_exclude_none=True,
+    dependencies=[Depends(current_superuser)],
 )
 async def delete_charity_project(
         project_id: int,
         session: AsyncSession = Depends(get_async_session),
 ):
+    """
+    Только для суперюзеров.
+
+    Удаляет проект.
+    Нельзя удалить проект, в который уже были инвестированы средства,
+    его можно только закрыть.
+    """
     project_db = await check_project_exist_not_close(project_id, session)
     check_invest_amount(project_db)
     project_db = await project_crud.delete(project_db, session)

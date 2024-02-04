@@ -30,7 +30,9 @@ router.include_router(
     deprecated=True
 )
 def delete_user(id: str):
-    """Не используйте удаление, деактивируйте пользователей."""
+    """
+    Не используйте удаление, деактивируйте пользователей.
+    """
     raise HTTPException(
         status_code=status.HTTP_405_METHOD_NOT_ALLOWED,
         detail=WARNING_USER_DELETE
