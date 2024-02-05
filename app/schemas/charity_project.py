@@ -7,8 +7,8 @@ from app.core.constants import PROJECT_CREATE_EXAMPLES, PROJECT_UPDATE_EXAMPLES
 
 
 class CharityProjectBase(BaseModel):
-    name: Optional[str] = Field(None, max_length=100)
-    description: Optional[str] = Field(None)
+    name: Optional[str] = Field(None, min_length=1, max_length=100)
+    description: Optional[str] = Field(None, min_length=1)
     full_amount: Optional[PositiveInt]
 
     class Config:
@@ -16,8 +16,8 @@ class CharityProjectBase(BaseModel):
 
 
 class CharityProjectCreate(CharityProjectBase):
-    name: str = Field(..., max_length=100)
-    description: str = Field(..., )
+    name: str = Field(..., min_length=1, max_length=100)
+    description: str = Field(..., min_length=1)
     full_amount: PositiveInt = Field(..., )
 
     class Config:

@@ -2,7 +2,10 @@ APP_TITLE = 'QRKot'
 APP_DESCRIPTION = 'Благотворительный фонд поддержки котиков'
 APP_URL = 'sqlite+aiosqlite:///./fastapi.db'
 WARNING_PROJECT_NOT_FOUND = 'Проект не найден!'
-WARNING_PROJECT_IS_CLOSED = 'Нельзя удалять или изменять закрытые проекты!'
+WARNING_PROJECT_NOT_EDIT = 'Закрытый проект нельзя редактировать!'
+WARNING_PROJECT_NOT_DELETE = (
+    'В проект были внесены средства, не подлежит удалению!'
+)
 WARNING_PROJECT_NAME_NOT_UNIQUE = 'Проект с таким именем уже существует!'
 WARNING_PROJECT_INVEST = (
     'В проект были внесены средства, не подлежит удалению!'

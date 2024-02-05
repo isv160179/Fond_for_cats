@@ -60,7 +60,6 @@ async def get_all_charity_projects(
 @router.patch(
     '/{project_id}',
     response_model=CharityProjectDB,
-    response_model_exclude_none=True,
     dependencies=[Depends(current_superuser)],
 )
 async def update_charity_project(
@@ -77,7 +76,10 @@ async def update_charity_project(
     Закрытый проект нельзя редактировать;
     нельзя установить требуемую сумму меньше уже вложенной.
     """
-    project_db = await check_project_exist_not_close(project_id, session)
+    project_db = await check_project_exist_not_close(
+        project_id,
+        'PATCH',
+        session)
     if project_json.full_amount is not None:
         check_full_amount(project_db, project_json.full_amount)
     if project_json.name is not None:
@@ -88,7 +90,6 @@ async def update_charity_project(
 @router.delete(
     '/{project_id}',
     response_model=CharityProjectDB,
-    response_model_exclude_none=True,
     dependencies=[Depends(current_superuser)],
 )
 async def delete_charity_project(
@@ -102,7 +103,10 @@ async def delete_charity_project(
     Нельзя удалить проект, в который уже были инвестированы средства,
     его можно только закрыть.
     """
-    project_db = await check_project_exist_not_close(project_id, session)
+    project_db = await check_project_exist_not_close(
+        project_id,
+        'DELETE',
+        session)
     check_invest_amount(project_db)
     project_db = await project_crud.delete(project_db, session)
     return project_db

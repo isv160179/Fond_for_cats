@@ -5,7 +5,9 @@ from app.core.constants import (
     WARNING_PROJECT_NOT_FOUND,
     WARNING_PROJECT_NAME_NOT_UNIQUE,
     WARNING_PROJECT_INVEST,
-    WARNING_PROJECT_AMOUNT, WARNING_PROJECT_IS_CLOSED
+    WARNING_PROJECT_AMOUNT,
+    WARNING_PROJECT_NOT_EDIT,
+    WARNING_PROJECT_NOT_DELETE,
 )
 from app.crud.charity_project import project_crud
 from app.models import CharityProject
@@ -13,6 +15,7 @@ from app.models import CharityProject
 
 async def check_project_exist_not_close(
         project_id: int,
+        method: str,
         session: AsyncSession
 ) -> CharityProject:
     project_db = await project_crud.get_project_by_id(project_id, session)
@@ -22,9 +25,13 @@ async def check_project_exist_not_close(
             detail=WARNING_PROJECT_NOT_FOUND
         )
     if project_db.fully_invested:
+        if method == 'PATCH':
+            detail = WARNING_PROJECT_NOT_EDIT
+        else:
+            detail = WARNING_PROJECT_NOT_DELETE
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail=WARNING_PROJECT_IS_CLOSED
+            detail=detail
         )
     return project_db
 
@@ -59,4 +66,3 @@ def check_full_amount(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=WARNING_PROJECT_AMOUNT,
         )
-
