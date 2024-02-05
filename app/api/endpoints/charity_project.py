@@ -10,12 +10,14 @@ from app.api.validators import (
 from app.core.db import get_async_session
 from app.core.user import current_superuser
 from app.crud.charity_project import project_crud
+from app.models import Donation
 from app.models.charity_project import CharityProject
 from app.schemas.charity_project import (
     CharityProjectCreate,
     CharityProjectDB,
     CharityProjectUpdate,
 )
+from app.services.donations import investment
 
 router = APIRouter()
 
@@ -40,7 +42,7 @@ async def create_charity_project(
     """
     await check_name_duplicate(new_project_json.name, session)
     new_project_db = await project_crud.create(new_project_json, session)
-    return new_project_db
+    return await investment(new_project_db, Donation, session)
 
 
 @router.get(

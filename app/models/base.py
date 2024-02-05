@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import TypeVar
 
 from sqlalchemy import Column, Integer, Boolean, DateTime
 
@@ -13,3 +14,6 @@ class Invest(Base):
     close_date = Column(DateTime)
 
     __abstract__ = True
+
+
+InvestModel = TypeVar('InvestModel', bound=Invest)
