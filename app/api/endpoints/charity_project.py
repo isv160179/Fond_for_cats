@@ -7,6 +7,10 @@ from app.api.validators import (
     check_full_amount,
     check_project_exist_not_close
 )
+from app.core.constants import (
+    WARNING_PROJECT_NOT_DELETE,
+    WARNING_PROJECT_NOT_EDIT
+)
 from app.core.db import get_async_session
 from app.core.user import current_superuser
 from app.crud.charity_project import project_crud
@@ -78,8 +82,9 @@ async def update_charity_project(
     """
     project_db = await check_project_exist_not_close(
         project_id,
-        'PATCH',
-        session)
+        WARNING_PROJECT_NOT_EDIT,
+        session
+    )
     if project_json.full_amount is not None:
         check_full_amount(project_db, project_json.full_amount)
     if project_json.name is not None:
@@ -105,8 +110,9 @@ async def delete_charity_project(
     """
     project_db = await check_project_exist_not_close(
         project_id,
-        'DELETE',
-        session)
+        WARNING_PROJECT_NOT_DELETE,
+        session
+    )
     check_invest_amount(project_db)
     project_db = await project_crud.delete(project_db, session)
     return project_db
