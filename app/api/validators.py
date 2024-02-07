@@ -12,9 +12,9 @@ from app.models import CharityProject
 
 
 async def check_project_exist_not_close(
-        project_id: int,
-        message: str,
-        session: AsyncSession
+    project_id: int,
+    message: str,
+    session: AsyncSession
 ) -> CharityProject:
     project_db = await project_crud.get_project_by_id(project_id, session)
     if project_db is None:
@@ -31,8 +31,8 @@ async def check_project_exist_not_close(
 
 
 async def check_name_duplicate(
-        project_name: str,
-        session: AsyncSession,
+    project_name: str,
+    session: AsyncSession,
 ) -> None:
     if await project_crud.check_unique_name(project_name, session):
         raise HTTPException(
@@ -42,7 +42,7 @@ async def check_name_duplicate(
 
 
 def check_invest_amount(
-        project_db: CharityProject,
+    project_db: CharityProject,
 ) -> None:
     if project_db.invested_amount > 0:
         raise HTTPException(
@@ -52,8 +52,8 @@ def check_invest_amount(
 
 
 def check_full_amount(
-        project_db: CharityProject,
-        full_amount: int,
+    project_db: CharityProject,
+    full_amount: int,
 ) -> None:
     if full_amount < project_db.invested_amount:
         raise HTTPException(

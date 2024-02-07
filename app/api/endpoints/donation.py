@@ -18,7 +18,7 @@ router = APIRouter()
     dependencies=[Depends(current_superuser)],
 )
 async def get_all_donations(
-        session: AsyncSession = Depends(get_async_session),
+    session: AsyncSession = Depends(get_async_session),
 ):
     """
     Только для суперюзеров.
@@ -34,12 +34,12 @@ async def get_all_donations(
     response_model_exclude_none=True,
 )
 async def create_donation(
-        new_donation_json: DonationCreate = Body(
-            ...,
-            examples=DonationCreate.Config.schema_extra['examples']
-        ),
-        session: AsyncSession = Depends(get_async_session),
-        user: User = Depends(current_user),
+    new_donation_json: DonationCreate = Body(
+        ...,
+        examples=DonationCreate.Config.schema_extra['examples']
+    ),
+    session: AsyncSession = Depends(get_async_session),
+    user: User = Depends(current_user),
 ) -> Donation:
     """
     Сделать пожертвование.
@@ -56,8 +56,8 @@ async def create_donation(
     '/my', response_model=list[DonationShortDB],
 )
 async def get_user_donations(
-        session: AsyncSession = Depends(get_async_session),
-        user: User = Depends(current_user)
+    session: AsyncSession = Depends(get_async_session),
+    user: User = Depends(current_user)
 ):
     """
     Вернуть список пожертвований пользователя, выполняющего запрос.

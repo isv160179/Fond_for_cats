@@ -17,9 +17,9 @@ class CRUDCharityProject(
 
     @staticmethod
     async def update(
-            project_db: CharityProject,
-            project_json: CharityProjectUpdate,
-            session: AsyncSession,
+        project_db: CharityProject,
+        project_json: CharityProjectUpdate,
+        session: AsyncSession,
     ) -> CharityProject:
         project_from_db_dict = jsonable_encoder(project_db)
         project_from_json_dict = project_json.dict(exclude_unset=True)
@@ -33,8 +33,8 @@ class CRUDCharityProject(
 
     @staticmethod
     async def delete(
-            project_db: CharityProject,
-            session: AsyncSession,
+        project_db: CharityProject,
+        session: AsyncSession,
     ) -> CharityProject:
         await session.delete(project_db)
         await session.commit()
@@ -42,8 +42,8 @@ class CRUDCharityProject(
 
     @staticmethod
     async def check_unique_name(
-            field_name: str,
-            session: AsyncSession,
+        field_name: str,
+        session: AsyncSession,
     ) -> Union[None, Boolean]:
         exists_criteria = (
             select(CharityProject).where(
@@ -57,8 +57,8 @@ class CRUDCharityProject(
 
     @staticmethod
     async def get_project_by_id(
-            project_id: int,
-            session: AsyncSession,
+        project_id: int,
+        session: AsyncSession,
     ) -> Optional[CharityProject]:
         return await session.get(CharityProject, project_id)
 

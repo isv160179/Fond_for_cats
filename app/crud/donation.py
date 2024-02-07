@@ -11,8 +11,8 @@ class CRUDDonation(
 ):
     @staticmethod
     async def get_by_user(
-            session: AsyncSession,
-            user: User
+        session: AsyncSession,
+        user: User
     ) -> list[Donation]:
         donations = await session.scalars(
             select(Donation).where(Donation.user_id == user.id)

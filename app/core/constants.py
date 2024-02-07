@@ -1,6 +1,10 @@
 APP_TITLE = 'QRKot'
 APP_DESCRIPTION = 'Благотворительный фонд поддержки котиков'
 APP_URL = 'sqlite+aiosqlite:///./fastapi.db'
+MIN_LENGHT_PASSWORD = 3
+USER_IS_REGISTERED = 'Пользователь {} зарегистрирован.'
+WARNING_LENGHT_PASSWORD = 'Password should be at least 3 characters'
+WARNING_PASSWORD_CONTAIN_EMAIL = 'Пароль не должен содержать e-mail'
 WARNING_PROJECT_NOT_FOUND = 'Проект не найден!'
 WARNING_PROJECT_NOT_EDIT = 'Закрытый проект нельзя редактировать!'
 WARNING_PROJECT_NOT_DELETE = (

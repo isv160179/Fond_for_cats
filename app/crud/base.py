@@ -17,17 +17,17 @@ class GetAllCreateBase(Generic[ModelType, CreateSchemaType]):
         self.model = model
 
     async def get_all(
-            self,
-            session: AsyncSession
+        self,
+        session: AsyncSession
     ) -> List[ModelType]:
         db_objs = await session.scalars(select(self.model))
         return db_objs.all()
 
     async def create(
-            self,
-            new_obj_json: CreateSchemaType,
-            session: AsyncSession,
-            user: Optional[User] = None
+        self,
+        new_obj_json: CreateSchemaType,
+        session: AsyncSession,
+        user: Optional[User] = None
     ) -> ModelType:
         new_obj_dict = new_obj_json.dict()
         if user is not None:

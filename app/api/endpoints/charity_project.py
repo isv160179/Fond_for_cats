@@ -33,11 +33,11 @@ router = APIRouter()
     dependencies=[Depends(current_superuser)],
 )
 async def create_charity_project(
-        new_project_json: CharityProjectCreate = Body(
-            ...,
-            examples=CharityProjectCreate.Config.schema_extra['examples']
-        ),
-        session: AsyncSession = Depends(get_async_session),
+    new_project_json: CharityProjectCreate = Body(
+        ...,
+        examples=CharityProjectCreate.Config.schema_extra['examples']
+    ),
+    session: AsyncSession = Depends(get_async_session),
 ) -> CharityProject:
     """
     Только для суперюзеров.
@@ -55,7 +55,7 @@ async def create_charity_project(
     response_model_exclude_none=True,
 )
 async def get_all_charity_projects(
-        session: AsyncSession = Depends(get_async_session),
+    session: AsyncSession = Depends(get_async_session),
 ):
     """Возвращает список всех проектов."""
     return await project_crud.get_all(session)
@@ -67,12 +67,12 @@ async def get_all_charity_projects(
     dependencies=[Depends(current_superuser)],
 )
 async def update_charity_project(
-        project_id: int,
-        project_json: CharityProjectUpdate = Body(
-            ...,
-            examples=CharityProjectUpdate.Config.schema_extra['examples']
-        ),
-        session: AsyncSession = Depends(get_async_session),
+    project_id: int,
+    project_json: CharityProjectUpdate = Body(
+        ...,
+        examples=CharityProjectUpdate.Config.schema_extra['examples']
+    ),
+    session: AsyncSession = Depends(get_async_session),
 ):
     """
     Только для суперюзеров.
@@ -98,8 +98,8 @@ async def update_charity_project(
     dependencies=[Depends(current_superuser)],
 )
 async def delete_charity_project(
-        project_id: int,
-        session: AsyncSession = Depends(get_async_session),
+    project_id: int,
+    session: AsyncSession = Depends(get_async_session),
 ):
     """
     Только для суперюзеров.
